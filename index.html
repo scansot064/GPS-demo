@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPS Demystified | Secondary School Science & Math Demonstration</title>
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Three.js for 3D Globe & Orbital Satellites -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+
+    <!-- Sticky Navigation -->
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a href="#" class="nav-brand">
+                <span class="brand-icon">🛰️</span>
+                <span>GPS Demystified</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#section-science">1. The Science</a></li>
+                <li><a href="#section-globe">2. 3D Globe</a></li>
+                <li><a href="#section-smartwatch">3. Smartwatch Feed</a></li>
+                <li><a href="#section-calculation">4. The Math Animation</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Header -->
+    <header class="hero">
+        <div class="container">
+            <span class="hero-badge">Physics & Mathematics in Action</span>
+            <h1>How GPS Finds You on Earth</h1>
+            <p>An interactive, step-by-step exploration of radio waves, atomic clocks, and 3D spherical trilateration for secondary science students.</p>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- ================================================================
+             SECTION 1: The Science and Equations
+             ================================================================ -->
+        <section id="section-science" class="demo-section">
+            <div class="section-header">
+                <div class="section-tag">Section 1 &bull; Physics & Geometry</div>
+                <h2 class="section-title">The Science & Equations Behind GPS</h2>
+                <p class="section-description">
+                    How can your smartwatch or phone pinpoint your exact location in milliseconds using signals sent from satellites floating 20,200 km out in space? It all comes down to time, the speed of light, and geometry.
+                </p>
+            </div>
+
+            <div class="science-grid">
+                <!-- Card 1 -->
+                <div class="science-card">
+                    <div class="science-card-icon">⚡</div>
+                    <h3>1. The Speed of Light</h3>
+                    <p>
+                        GPS satellites broadcast high-frequency radio waves (part of the electromagnetic spectrum). Radio waves travel at the constant speed of light in vacuum and air:
+                    </p>
+                    <div class="math-display-box">
+                        c &approx; 299,792.458 km/s
+                    </div>
+                    <p>
+                        At this blazing speed, a signal travels all the way from orbit (~20,200 km) to your ground antenna in only about <strong>0.067 seconds (67 milliseconds)</strong>!
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="science-card">
+                    <div class="science-card-icon">⏱️</div>
+                    <h3>2. Time-of-Flight Equation</h3>
+                    <p>
+                        Every satellite carries hyper-accurate <strong>atomic clocks</strong> (cesium/rubidium). The satellite sends out the exact moment the signal was transmitted (<em>t</em><sub>tx</sub>).
+                    </p>
+                    <div class="math-display-box">
+                        d = c &times; &Delta;t = c &times; (t<sub>rx</sub> - t<sub>tx</sub>)
+                    </div>
+                    <p>
+                        By subtracting transmission time from arrival time, the receiver computes the exact radial distance <em>d</em> to the satellite.
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="science-card">
+                    <div class="science-card-icon">🌐</div>
+                    <h3>3. Spherical Trilateration</h3>
+                    <p>
+                        Knowing distance <em>d</em> to one satellite places you somewhere on the surface of a 3D sphere. In Cartesian space (<em>X, Y, Z</em>):
+                    </p>
+                    <div class="math-display-box">
+                        (X - X<sub>i</sub>)&sup2; + (Y - Y<sub>i</sub>)&sup2; + (Z - Z<sub>i</sub>)&sup2; = d<sub>i</sub>&sup2;
+                    </div>
+                    <p>
+                        Measuring distances to multiple satellites allows us to find where their spheres intersect!
+                    </p>
+                </div>
+            </div>
+
+            <!-- Deep Dive on 3 vs 4 Satellites -->
+            <div class="deep-dive-card">
+                <h4>💡 Trilateration vs. Triangulation & The "4th Satellite" Mystery</h4>
+                <div class="deep-dive-grid">
+                    <div>
+                        <strong>Trilateration (Distances) vs. Triangulation (Angles):</strong>
+                        <p style="color: var(--text-secondary); margin-top: 6px; font-size: 0.95rem;">
+                            Many people say "GPS triangulation", but that is technically a misnomer! Triangulation measures <em>angles</em> (like a surveyor with a theodolite). GPS uses <strong>trilateration</strong>, measuring <em>distances</em> from time delays.
+                        </p>
+                    </div>
+                    <div>
+                        <strong>Why 3 Satellites Give 2 Points (and why we need a 4th in real life):</strong>
+                        <p style="color: var(--text-secondary); margin-top: 6px; font-size: 0.95rem;">
+                            Mathematically, 3 spheres intersect at <strong>two points</strong>: one is right on Earth, and the other is tens of thousands of kilometers out in outer space! The receiver easily discards the space point. In real life, consumer watches don't have atomic clocks, so a <strong>4th satellite</strong> is used to solve for receiver clock bias (&Delta;t<sub>clock</sub>).
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================================
+             SECTION 2: 3D Globe & Satellite Beams
+             ================================================================ -->
+        <section id="section-globe" class="demo-section">
+            <div class="section-header">
+                <div class="section-tag">Section 2 &bull; Interactive 3D Demonstration</div>
+                <h2 class="section-title">The 3D Earth & Satellite Constellation</h2>
+                <p class="section-description">
+                    Drag the Earth to rotate. Click or tap anywhere on the globe to place your receiver location (snapped to whole degrees). Then press <strong>"Acquire Satellites"</strong> to launch 3 GPS satellites into space and beam squiggly radio wave signals down to your point!
+                </p>
+            </div>
+
+            <div class="globe-layout">
+                <!-- 3D Canvas Card -->
+                <div class="globe-viewer-card">
+                    <div id="globe-canvas-container"></div>
+                    <div class="globe-overlay-hint">
+                        🖱️ <strong>Left Click + Drag</strong> to rotate | <strong>Wheel</strong> to zoom | <strong>Click</strong> to place target
+                    </div>
+                </div>
+
+                <!-- Controls Sidebar -->
+                <div class="globe-controls-panel">
+                    <div class="control-group">
+                        <span class="control-label">Current Receiver Position</span>
+                        <div class="status-callout">
+                            <div class="status-callout-title">Target Coordinates</div>
+                            <div class="status-callout-value" id="selected-location-badge">40&deg; N, 3&deg; W</div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="preset-cities-select">Jump to City Preset</label>
+                        <select id="preset-cities-select" class="custom-select">
+                            <option value="">-- Select a City --</option>
+                        </select>
+                    </div>
+
+                    <div class="control-group" style="margin-top: 10px;">
+                        <button id="btn-ping-satellites" class="btn btn-primary">
+                            🛰️ Acquire Satellites & Beam Signal
+                        </button>
+                    </div>
+
+                    <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; border-top: 1px solid var(--border-color); padding-top: 14px;">
+                        <em>Notice how the 3 satellites spread out across the sky above your target. This wide angular separation (low GDOP) ensures accurate spherical intersections!</em>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================================
+             SECTION 3: Smartwatch Telemetry Feed
+             ================================================================ -->
+        <section id="section-smartwatch" class="demo-section">
+            <div class="section-header">
+                <div class="section-tag">Section 3 &bull; Telemetry Feed</div>
+                <h2 class="section-title">What the Smartwatch Is Receiving</h2>
+                <p class="section-description">
+                    Here is what the receiver computer inside a smartwatch actually "hears". Each satellite continuously transmits its identification number, orbital position (ephemeris), and atomic clock timestamp.
+                </p>
+            </div>
+
+            <div class="smartwatch-wrapper">
+                <div id="smartwatch-container">
+                    <!-- Injected by smartwatch.js -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================================
+             SECTION 4: The Math Animation (Coordinate Solver)
+             ================================================================ -->
+        <section id="section-calculation" class="demo-section">
+            <div class="section-header">
+                <div class="section-tag">Section 4 &bull; Step-by-Step Animation</div>
+                <h2 class="section-title">How the Watch Calculates Your Coordinates</h2>
+                <p class="section-description">
+                    Follow the step-by-step animation below to see how raw millisecond time delays transform into intersecting spheres, eliminate false points, and pinpoint your whole-degree latitude and longitude!
+                </p>
+            </div>
+
+            <div id="calculator-container">
+                <!-- Injected by calculator.js -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>GPS Demonstration for Secondary Science &bull; Physics, Geometry, and Telecommunications</p>
+            <p style="margin-top: 6px;">Zero build dependencies &bull; Built with HTML5, CSS3, and Three.js</p>
+        </div>
+    </footer>
+
+    <!-- App Scripts (Offline / Local Friendly) -->
+    <script src="js/continents.js"></script>
+    <script src="js/globe.js"></script>
+    <script src="js/smartwatch.js"></script>
+    <script src="js/calculator.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
