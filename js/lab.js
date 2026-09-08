@@ -296,10 +296,29 @@ class GPSInteractiveLab {
         ];
     }
 
+    shuffle(array) {
+        const arr = [...array];
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    scrambleTray() {
+        const tray = document.getElementById('lab-blocks-tray');
+        if (!tray) return;
+        const blocks = Array.from(tray.children);
+        for (let i = blocks.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            tray.appendChild(blocks[j]);
+        }
+    }
+
     render() {
         const val = this.getLiveValues();
         const stageDef = this.stageDefinitions[this.currentStageIndex];
-        const blocks = stageDef.getBlocks(val);
+        const blocks = this.shuffle(stageDef.getBlocks(val));
 
         this.container.innerHTML = `
             <div class="lab-card">
@@ -426,6 +445,7 @@ class GPSInteractiveLab {
 
         clearBtn.addEventListener('click', () => {
             slots.forEach(slot => this.removeBlockFromSlot(slot));
+            this.scrambleTray();
             this.checkSolveReadiness();
         });
 
