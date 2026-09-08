@@ -1028,3 +1028,408 @@ body {
     vertical-align: 0.45em;
     color: #ffaa00;
 }
+
+/* ==========================================================================
+   Section 5: Interactive GPS Equation Lab Styles
+   ========================================================================== */
+.lab-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.lab-header {
+    background: #060e1a;
+    border-bottom: 1px solid var(--border-color);
+    padding: 18px 24px;
+}
+
+.lab-stage-steps {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.lab-stage-steps::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    right: 20px;
+    height: 2px;
+    background: #14243b;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.lab-step-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+    z-index: 2;
+}
+
+.step-dot {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #0d1a2d;
+    border: 2px solid #223757;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.step-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.lab-step-indicator.active .step-dot {
+    background: var(--accent-cyan);
+    border-color: #fff;
+    color: #000;
+    box-shadow: 0 0 12px rgba(0, 210, 255, 0.6);
+}
+
+.lab-step-indicator.active .step-label {
+    color: var(--accent-cyan);
+}
+
+.lab-step-indicator.completed .step-dot {
+    background: #00ff88;
+    border-color: #00ff88;
+    color: #003314;
+}
+
+.lab-step-indicator.completed .step-label {
+    color: #00ff88;
+}
+
+.lab-stage-body {
+    padding: 30px;
+}
+
+.lab-meta-row {
+    margin-bottom: 16px;
+}
+
+.lab-stage-title {
+    font-size: 1.6rem;
+    color: #fff;
+    margin: 8px 0 4px;
+}
+
+.lab-stage-subtitle {
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+.lab-instruction-bar {
+    background: rgba(0, 210, 255, 0.08);
+    border: 1px solid rgba(0, 210, 255, 0.25);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+    color: #dce7fa;
+    margin-bottom: 24px;
+}
+
+.hint-icon {
+    font-size: 1.3rem;
+}
+
+/* Equation Frame & Slots */
+.lab-equation-frame {
+    background: #040913;
+    border: 2px dashed #1c3050;
+    border-radius: var(--radius-md);
+    padding: 24px 20px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 120px;
+}
+
+.lab-eq-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.lab-eq-multi {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.eq-symbol {
+    font-size: 1.4rem;
+    color: #fff;
+}
+
+.eq-operator {
+    font-size: 1.4rem;
+    color: var(--accent-cyan);
+    font-weight: bold;
+}
+
+.eq-paren, .eq-bracket {
+    font-size: 1.6rem;
+    color: var(--text-secondary);
+}
+
+.eq-func {
+    font-size: 1.3rem;
+    color: #ffaa00;
+    font-weight: 600;
+}
+
+.drop-slot {
+    min-width: 140px;
+    min-height: 48px;
+    border: 2px dashed #304d77;
+    border-radius: var(--radius-sm);
+    background: rgba(16, 29, 49, 0.6);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 10px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.drop-slot:hover {
+    border-color: var(--accent-cyan);
+    background: rgba(0, 210, 255, 0.05);
+}
+
+.drop-slot.drag-over {
+    border-color: #00ff88;
+    background: rgba(0, 255, 136, 0.15);
+    transform: scale(1.04);
+}
+
+.drop-slot.filled {
+    border-style: solid;
+    border-color: var(--accent-cyan);
+    background: rgba(0, 210, 255, 0.12);
+}
+
+.slot-placeholder {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-family: var(--font-main);
+    user-select: none;
+}
+
+.placed-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-main);
+}
+
+.pill-label {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.pill-remove-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: #fff;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.pill-remove-btn:hover {
+    background: #ff3366;
+}
+
+/* Movable Blocks Tray */
+.lab-tray-container {
+    background: #070f1c;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 18px;
+    margin-bottom: 24px;
+}
+
+.tray-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+}
+
+.lab-blocks-tray {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.movable-block {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(145deg, #13243d, #0d1a2e);
+    border: 1px solid #233b61;
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    cursor: grab;
+    user-select: none;
+    transition: all 0.2s ease;
+}
+
+.movable-block:hover {
+    border-color: var(--accent-cyan);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 210, 255, 0.2);
+}
+
+.movable-block:active {
+    cursor: grabbing;
+}
+
+.movable-block.dragging {
+    opacity: 0.4;
+}
+
+.movable-block.placed {
+    opacity: 0.3;
+    pointer-events: none;
+    filter: grayscale(80%);
+}
+
+.movable-block.selected-touch {
+    border-color: #00ff88;
+    background: rgba(0, 255, 136, 0.15);
+    box-shadow: 0 0 14px rgba(0, 255, 136, 0.4);
+}
+
+.block-grip {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.block-label {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--accent-cyan);
+}
+
+.block-desc {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+/* Actions */
+.lab-actions-bar {
+    display: flex;
+    justify-content: flex-end;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+#btn-solve-equation.ready-to-solve {
+    background: linear-gradient(135deg, #00ff88, #00d2ff);
+    color: #000;
+    animation: solvePulse 1.6s infinite;
+}
+
+@keyframes solvePulse {
+    0%, 100% {
+        box-shadow: 0 0 12px rgba(0, 255, 136, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 24px rgba(0, 255, 136, 0.8);
+    }
+}
+
+/* Results Box */
+.result-success-box {
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 210, 255, 0.08));
+    border: 1px solid var(--accent-green);
+    border-radius: var(--radius-md);
+    padding: 20px 24px;
+    animation: fadeInSlide 0.3s ease;
+}
+
+@keyframes fadeInSlide {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.res-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--accent-green);
+    margin-bottom: 8px;
+}
+
+.res-math {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.res-explanation {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+.final-celebration {
+    text-align: center;
+    padding: 30px;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.15), rgba(217, 70, 239, 0.15));
+    border-color: #00ff88;
+}
+
+.celebration-badge {
+    display: inline-block;
+    background: rgba(0, 255, 136, 0.2);
+    border: 1px solid #00ff88;
+    color: #00ff88;
+    padding: 4px 14px;
+    border-radius: var(--radius-full);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}

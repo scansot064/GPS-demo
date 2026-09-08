@@ -40,6 +40,16 @@ Zero build steps, zero package installations—simply open `index.html` in any m
 - **Step 5: Earth Filtering & Geographic Coordinates**: Discards the space solution and converts $(X, Y, Z)$ into final integer **Latitude & Longitude**!
 - Interactive stepper controls: **Auto-Play**, **Next Step**, **Previous Step**, and **Reset**.
 
+### 5. Interactive GPS Equation Lab (Hands-on Solver)
+- **Movable Data Blocks**: Drag-and-drop on desktop, or tap-to-place on touchscreens/tablets.
+- **5-Stage Puzzle Flow**:
+  1. **Time of Flight**: $\Delta t_1 = t_{\text{rx}} - t_{\text{tx}, 1}$
+  2. **Pseudorange Distance**: $d_1 = c \times \Delta t_1$
+  3. **3D Sphere Shell**: $(X - X_1)^2 + (Y - Y_1)^2 + (Z - Z_1)^2 = d_1^2$
+  4. **4th Satellite Clock Bias**: $(X - X_i)^2 + (Y - Y_i)^2 + (Z - Z_i)^2 = [c \times (\Delta t_i - \Delta t_{\text{clock}})]^2$
+  5. **Final Coordinates**: $\text{Latitude} = \arcsin(Z / R_{\text{Earth}})$, $\text{Longitude} = \text{atan2}(Y, X)$
+- **Order Verification & SOLVE!**: The SOLVE button activates and pulses only when blocks are in the correct positions, computing real values, playing sound effects, and rewarding students with a final GPS Fix badge!
+
 ---
 
 ## 🚀 How to Run

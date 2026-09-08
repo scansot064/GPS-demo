@@ -28,11 +28,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Initialize Interactive Lab (Section 5)
+    const lab = new GPSInteractiveLab('interactive-lab-container');
+
     // Initialize 3D Globe
     const globe = new GPSGlobe('globe-canvas-container', {
         onLocationSelect: (telemetry) => {
             smartwatch.update(telemetry);
             calculator.update(telemetry);
+            lab.update(telemetry);
             updateSelectedDisplay(telemetry.userCoords);
         }
     });
