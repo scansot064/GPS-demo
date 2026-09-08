@@ -151,6 +151,10 @@ class SmartwatchDisplay {
                             <span class="t-label">📏 Pseudorange (c &times; &Delta;t):</span>
                             <span class="t-val distance-val mono-font">${parseFloat(sat.distanceKm).toLocaleString()} km</span>
                         </div>
+                        <div class="telemetry-row math-breakdown-row">
+                            <span class="t-label" style="font-size: 0.72rem; color: #8aa4cc;">✏️ Math:</span>
+                            <span class="t-val mono-font" style="font-size: 0.72rem; color: #00ff88;">299,792 &times; ${(parseFloat(sat.timeDeltaMs)/1000).toFixed(4)}s = ${parseFloat(sat.distanceKm).toLocaleString()} km</span>
+                        </div>
                     </div>
                 </div>
             `;
