@@ -41,8 +41,8 @@ class SmartwatchDisplay {
                         <!-- Clock Bias & Fix Banner -->
                         <div class="watch-clock-sync-banner" id="watch-clock-sync-banner">
                             <div class="sync-item">
-                                <span class="sync-label">⏱️ Quartz Clock Bias (\\Delta t_{clock}):</span>
-                                <span class="sync-val mono-font" id="watch-clock-bias">+1.28 \\mu s \\rightarrow 0.00 ns (Synced!)</span>
+                                <span class="sync-label">⏱️ Quartz Clock Bias (&Delta;t<sub>clock</sub>):</span>
+                                <span class="sync-val mono-font" id="watch-clock-bias">+1.28 &mu;s &rarr; 0.00 ns (Synced!)</span>
                             </div>
                             <div class="sync-item">
                                 <span class="sync-label">🌐 Solution Type:</span>
@@ -136,19 +136,19 @@ class SmartwatchDisplay {
                             <span class="t-val mono-font">X:${sat.ecef.x}, Y:${sat.ecef.y}, Z:${sat.ecef.z} km</span>
                         </div>
                         <div class="telemetry-row">
-                            <span class="t-label">⏱️ Broadcast ($t_{tx}$):</span>
+                            <span class="t-label">⏱️ Broadcast (t<sub>tx</sub>):</span>
                             <span class="t-val mono-font">${sat.txTimeFormatted}</span>
                         </div>
                         <div class="telemetry-row">
-                            <span class="t-label">⌚ Arrival ($t_{rx}$):</span>
+                            <span class="t-label">⌚ Arrival (t<sub>rx</sub>):</span>
                             <span class="t-val mono-font">${sat.rxTimeFormatted}</span>
                         </div>
                         <div class="telemetry-row highlight-row">
-                            <span class="t-label">⚡ Time Delta ($\\Delta t$):</span>
+                            <span class="t-label">⚡ Time Delta (&Delta;t):</span>
                             <span class="t-val highlight-val mono-font">${sat.timeDeltaMs} ms</span>
                         </div>
                         <div class="telemetry-row calc-row">
-                            <span class="t-label">📏 Pseudorange ($c \\times \\Delta t$):</span>
+                            <span class="t-label">📏 Pseudorange (c &times; &Delta;t):</span>
                             <span class="t-val distance-val mono-font">${parseFloat(sat.distanceKm).toLocaleString()} km</span>
                         </div>
                     </div>

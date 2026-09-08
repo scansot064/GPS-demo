@@ -20,12 +20,12 @@ class GPSCalculator {
                 badge: "Step 1 of 5",
                 subtitle: "Measuring time delays from 4 satellites traveling at the speed of light",
                 description: `
-                    <p>Each of the <strong>4 satellites</strong> carries an atomic clock and broadcasts its exact transmission timestamp (<span class="code-pill">t_tx</span>) and orbital position (<span class="code-pill">X, Y, Z</span>).</p>
-                    <p>Your watch registers the arrival time (<span class="code-pill">t_rx</span>). Radio waves travel at the speed of light (<span class="code-pill">c = 299,792.458 km/s</span>), giving 4 raw distances called <strong>pseudoranges</strong>:</p>
-                    <div class="formula-box">
-                        $$\\rho_i = c \\times (t_{rx} - t_{tx, i}) = c \\times \\Delta t_i$$
+                    <p>Each of the <strong>4 satellites</strong> carries an atomic clock and broadcasts its exact transmission timestamp (<span class="code-pill">t<sub>tx</sub></span>) and orbital position (<span class="code-pill">X, Y, Z</span>).</p>
+                    <p>Your watch registers the arrival time (<span class="code-pill">t<sub>rx</sub></span>). Radio waves travel at the speed of light (<span class="code-pill">c &approx; 299,792.458 km/s</span>), giving 4 raw distances called <strong>pseudoranges</strong> (&rho;):</p>
+                    <div class="formula-box math-formula">
+                        &rho;<sub>i</sub> = c &times; (t<sub>rx</sub> - t<sub>tx, i</sub>) = c &times; &Delta;t<sub>i</sub>
                     </div>
-                    <p><em>Why "pseudoranges"?</em> Because your watch contains an inexpensive quartz clock with a slight unknown time error (<span class="code-pill">\\Delta t_{clock}</span>). A clock error of just 1 microsecond would throw position off by 300 meters! We will use the 4th satellite to solve for this error.</p>
+                    <p><em>Why "pseudoranges"?</em> Because your watch contains an inexpensive quartz clock with a slight unknown time error (<span class="code-pill">&Delta;t<sub>clock</sub></span>). A clock error of just 1 microsecond would throw position off by 300 meters! We will use the 4th satellite to solve for this error.</p>
                 `
             },
             {
@@ -36,8 +36,8 @@ class GPSCalculator {
                 description: `
                     <p>Satellite 1 (PRN 12) gives our first radial distance: <strong class="c-sat1" id="calc-step2-dist">... km</strong>.</p>
                     <p>All points in space at this exact distance form a 3D sphere centered on Satellite 1. You could be anywhere on this sphere (in space, on the ground, or underground!).</p>
-                    <div class="formula-box">
-                        $$(X - X_1)^2 + (Y - Y_1)^2 + (Z - Z_1)^2 = d_1^2$$
+                    <div class="formula-box math-formula">
+                        (X - X<sub>1</sub>)<sup>2</sup> + (Y - Y<sub>1</sub>)<sup>2</sup> + (Z - Z<sub>1</sub>)<sup>2</sup> = d<sub>1</sub><sup>2</sup>
                     </div>
                 `
             },
@@ -49,8 +49,8 @@ class GPSCalculator {
                 description: `
                     <p>Satellite 2 (PRN 24) introduces a second sphere with radius <strong class="c-sat2" id="calc-step3-dist">... km</strong>.</p>
                     <p>In 3D geometry, two intersecting spheres overlap along a <strong>flat 2D circle</strong> in space. We know for certain our location lies somewhere along the boundary of this ring!</p>
-                    <div class="formula-box">
-                        $$\\text{Sphere}_1 \\cap \\text{Sphere}_2 = \\text{Circle of Intersection}$$
+                    <div class="formula-box math-formula">
+                        Sphere<sub>1</sub> &cap; Sphere<sub>2</sub> = Circle of Intersection
                     </div>
                 `
             },
@@ -63,8 +63,8 @@ class GPSCalculator {
                     <p>Satellite 3 (PRN 08) adds a third sphere of radius <strong class="c-sat3" id="calc-step4-dist">... km</strong>.</p>
                     <p>The 3rd sphere cuts through our circle at exactly <strong>TWO points</strong>: <span class="highlight-point">Point A</span> and <span class="highlight-point">Point B</span>.</p>
                     <p>One point is on Earth, but the second point is ~20,000 km out in outer space! However, we still have one crucial problem: our watch clock is not an atomic clock.</p>
-                    <div class="formula-box">
-                        $$\\text{Circle} \\cap \\text{Sphere}_3 = \\{ \\text{Point}_A \\text{ (Earth)}, \\text{Point}_B \\text{ (Space)} \\}$$
+                    <div class="formula-box math-formula">
+                        Circle &cap; Sphere<sub>3</sub> = { Point<sub>A</sub> (Earth), Point<sub>B</sub> (Outer Space) }
                     </div>
                 `
             },
@@ -74,12 +74,16 @@ class GPSCalculator {
                 badge: "Step 5 of 5",
                 subtitle: "The 4th satellite solves for 4 unknowns (X, Y, Z, and Clock Error)!",
                 description: `
-                    <p>Here is where the <strong>4th Satellite (PRN 15)</strong> solves the whole puzzle! We have 4 unknowns: 3 spatial coordinates (<span class="code-pill">X, Y, Z</span>) plus the receiver clock bias (<span class="code-pill">\\Delta t_{clock}</span>).</p>
-                    <p>The 4th sphere will ONLY intersect the Earth point if <span class="code-pill">\\Delta t_{clock}</span> is perfectly adjusted! By solving the system of 4 equations simultaneously:</p>
-                    <div class="formula-box">
-                        $$(X - X_i)^2 + (Y - Y_i)^2 + (Z - Z_i)^2 = \\Big(c \\cdot (\\Delta t_i - \\Delta t_{clock})\\Big)^2, \quad i \\in \\{1, 2, 3, 4\\}$$
+                    <p>Here is where the <strong>4th Satellite (PRN 15)</strong> solves the whole puzzle! We have 4 unknowns: 3 spatial coordinates (<span class="code-pill">X, Y, Z</span>) plus the receiver clock bias (<span class="code-pill">&Delta;t<sub>clock</sub></span>).</p>
+                    <p>The 4th sphere will ONLY intersect the Earth point if <span class="code-pill">&Delta;t<sub>clock</sub></span> is perfectly adjusted! By solving the system of 4 equations simultaneously:</p>
+                    <div class="formula-box math-formula">
+                        (X - X<sub>i</sub>)<sup>2</sup> + (Y - Y<sub>i</sub>)<sup>2</sup> + (Z - Z<sub>i</sub>)<sup>2</sup> = [c &times; (&Delta;t<sub>i</sub> - &Delta;t<sub>clock</sub>)]<sup>2</sup>
+                        <div style="font-size: 0.85em; color: var(--text-secondary); margin-top: 6px;">for each satellite i &in; {1, 2, 3, 4}</div>
                     </div>
                     <p>The watch corrects its quartz clock to atomic synchronization, eliminates the outer space point, and converts Cartesian <span class="code-pill">(X, Y, Z)</span> to your exact whole-degree geographic coordinates:</p>
+                    <div class="formula-box math-formula" style="border-left-color: var(--accent-green);">
+                        Latitude = arcsin(Z / R<sub>Earth</sub>) &nbsp;&bull;&nbsp; Longitude = atan2(Y, X)
+                    </div>
                     <div class="final-fix-card" id="calc-final-fix-box">
                         Final Calculated Position: <strong id="calc-final-coords" class="glow-text">--° N, --° W</strong> &bull; Clock Sync: <strong style="color: #00d2ff;">0.00 ns Atomic Lock</strong>
                     </div>
@@ -257,9 +261,9 @@ class GPSCalculator {
                     ${sats.map((s, idx) => `
                         <div class="math-card" style="border-left-color: ${s.color}">
                             <div class="math-card-title" style="color: ${s.color}">${s.name} (${s.prn})</div>
-                            <div class="math-line"><span>Delay (\\Delta t):</span> <strong>${s.timeDeltaMs} ms</strong></div>
+                            <div class="math-line"><span>Delay (&Delta;t):</span> <strong>${s.timeDeltaMs} ms</strong></div>
                             <div class="math-line"><span>Speed of Light (c):</span> <span>299,792 km/s</span></div>
-                            <div class="math-line highlight-calc"><span>Radius (d_${idx+1}):</span> <strong>${parseFloat(s.distanceKm).toLocaleString()} km</strong></div>
+                            <div class="math-line highlight-calc"><span>Pseudorange Radius (d<sub>${idx+1}</sub>):</span> <strong>${parseFloat(s.distanceKm).toLocaleString()} km</strong></div>
                         </div>
                     `).join('')}
                 </div>
