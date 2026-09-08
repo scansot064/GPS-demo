@@ -16,9 +16,10 @@ class GPSGlobe {
         this.activeStep = 0;
         
         this.satellites = [
-            { id: 1, name: 'NAVSTAR SVN 12', prn: 'PRN 12', color: 0x00f0ff, hexColor: '#00f0ff', relAzimuth: 35, relElev: 62 },
-            { id: 2, name: 'NAVSTAR SVN 24', prn: 'PRN 24', color: 0xffb000, hexColor: '#ffb000', relAzimuth: 155, relElev: 52 },
-            { id: 3, name: 'NAVSTAR SVN 08', prn: 'PRN 08', color: 0x00ff88, hexColor: '#00ff88', relAzimuth: 275, relElev: 68 }
+            { id: 1, name: 'NAVSTAR SVN 12', prn: 'PRN 12', color: 0x00f0ff, hexColor: '#00f0ff', relAzimuth: 40, relElev: 58 },
+            { id: 2, name: 'NAVSTAR SVN 24', prn: 'PRN 24', color: 0xffb000, hexColor: '#ffb000', relAzimuth: 130, relElev: 50 },
+            { id: 3, name: 'NAVSTAR SVN 08', prn: 'PRN 08', color: 0x00ff88, hexColor: '#00ff88', relAzimuth: 220, relElev: 62 },
+            { id: 4, name: 'NAVSTAR SVN 15', prn: 'PRN 15', color: 0xd946ef, hexColor: '#d946ef', relAzimuth: 310, relElev: 72 }
         ];
 
         this.initScene();
@@ -589,14 +590,17 @@ class GPSGlobe {
                 sphere.material.opacity = 0.22;
             } else if (step === 3 && (i === 0 || i === 1)) {
                 sphere.material.opacity = 0.18;
-            } else if (step >= 4) {
-                sphere.material.opacity = 0.12;
+            } else if (step === 4 && (i <= 2)) {
+                sphere.material.opacity = 0.14;
+            } else if (step === 5) {
+                sphere.material.opacity = 0.10;
             } else {
                 sphere.material.opacity = 0.0;
             }
         });
 
         this.intersectionCircle.material.opacity = (step === 3 || step === 4) ? 0.8 : 0.0;
+        // In step 4 both points are shown; in step 5 the false space point fades out as 4th sat confirms Earth point
         this.falsePointMesh.material.opacity = (step === 4) ? 0.9 : 0.0;
     }
 

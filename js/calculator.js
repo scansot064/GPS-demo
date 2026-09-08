@@ -1,6 +1,6 @@
 /**
  * GPS Demonstration - Step-by-step Coordinate Calculation Animation
- * Breaks down trilateration into 5 clear pedagogical phases for secondary students
+ * Breaks down trilateration and the 4th satellite clock bias correction for secondary students
  */
 
 class GPSCalculator {
@@ -16,25 +16,26 @@ class GPSCalculator {
         this.stepsInfo = [
             {
                 number: 1,
-                title: "Calculate Satellite Distances (Time of Flight)",
+                title: "Calculate Distances: The 4 Pseudoranges",
                 badge: "Step 1 of 5",
-                subtitle: "Measuring the time delay of radio waves traveling at light speed",
+                subtitle: "Measuring time delays from 4 satellites traveling at the speed of light",
                 description: `
-                    <p>Every GPS satellite broadcasts its precise atomic clock time (<span class="code-pill">t_tx</span>) and its 3D position in space (<span class="code-pill">X, Y, Z</span>).</p>
-                    <p>Your watch notes the arrival time (<span class="code-pill">t_rx</span>). Because radio waves travel at the speed of light (<span class="code-pill">c = 299,792.458 km/s</span>), the distance is simply:</p>
+                    <p>Each of the <strong>4 satellites</strong> carries an atomic clock and broadcasts its exact transmission timestamp (<span class="code-pill">t_tx</span>) and orbital position (<span class="code-pill">X, Y, Z</span>).</p>
+                    <p>Your watch registers the arrival time (<span class="code-pill">t_rx</span>). Radio waves travel at the speed of light (<span class="code-pill">c = 299,792.458 km/s</span>), giving 4 raw distances called <strong>pseudoranges</strong>:</p>
                     <div class="formula-box">
-                        $$d = c \times \Delta t = c \times (t_{rx} - t_{tx})$$
+                        $$\\rho_i = c \\times (t_{rx} - t_{tx, i}) = c \\times \\Delta t_i$$
                     </div>
+                    <p><em>Why "pseudoranges"?</em> Because your watch contains an inexpensive quartz clock with a slight unknown time error (<span class="code-pill">\\Delta t_{clock}</span>). A clock error of just 1 microsecond would throw position off by 300 meters! We will use the 4th satellite to solve for this error.</p>
                 `
             },
             {
                 number: 2,
                 title: "Satellite 1: First Sphere of Possibility",
                 badge: "Step 2 of 5",
-                subtitle: "One distance narrows your position to a spherical shell in space",
+                subtitle: "Distance from Satellite 1 defines a giant 3D spherical shell in space",
                 description: `
-                    <p>With only Satellite 1, we know we are exactly <strong class="c-sat1" id="calc-step2-dist">... km</strong> away from it.</p>
-                    <p>All points at this distance form a giant 3D sphere centered on Satellite 1. You could be anywhere on this sphere's surface (on Earth, deep underground, or floating in space!).</p>
+                    <p>Satellite 1 (PRN 12) gives our first radial distance: <strong class="c-sat1" id="calc-step2-dist">... km</strong>.</p>
+                    <p>All points in space at this exact distance form a 3D sphere centered on Satellite 1. You could be anywhere on this sphere (in space, on the ground, or underground!).</p>
                     <div class="formula-box">
                         $$(X - X_1)^2 + (Y - Y_1)^2 + (Z - Z_1)^2 = d_1^2$$
                     </div>
@@ -44,12 +45,12 @@ class GPSCalculator {
                 number: 3,
                 title: "Satellite 2: Two Spheres Intersect in a Circle",
                 badge: "Step 3 of 5",
-                subtitle: "Adding a second satellite cuts the possibilities down to a 2D ring",
+                subtitle: "Adding Satellite 2 cuts the possibilities down to a flat circular ring",
                 description: `
-                    <p>We now bring in Satellite 2 at distance <strong class="c-sat2" id="calc-step3-dist">... km</strong>, creating a second giant sphere.</p>
-                    <p>When two spheres intersect in 3D geometry, their overlap is a <strong>flat circular ring</strong> in space. We are guaranteed to be somewhere along this ring!</p>
+                    <p>Satellite 2 (PRN 24) introduces a second sphere with radius <strong class="c-sat2" id="calc-step3-dist">... km</strong>.</p>
+                    <p>In 3D geometry, two intersecting spheres overlap along a <strong>flat 2D circle</strong> in space. We know for certain our location lies somewhere along the boundary of this ring!</p>
                     <div class="formula-box">
-                        $$\text{Sphere}_1 \cap \text{Sphere}_2 = \text{Circle of Intersection}$$
+                        $$\\text{Sphere}_1 \\cap \\text{Sphere}_2 = \\text{Circle of Intersection}$$
                     </div>
                 `
             },
@@ -57,29 +58,30 @@ class GPSCalculator {
                 number: 4,
                 title: "Satellite 3: Three Spheres Intersect at 2 Points",
                 badge: "Step 4 of 5",
-                subtitle: "A third sphere intersects the circle at exactly TWO points",
+                subtitle: "Satellite 3 intersects the circle at exactly TWO points (Earth vs. Outer Space)",
                 description: `
-                    <p>Adding Satellite 3 creates a third sphere at distance <strong class="c-sat3" id="calc-step4-dist">... km</strong>.</p>
-                    <p>This 3rd sphere cuts through our circle at exactly <strong>TWO points</strong>: <span class="highlight-point">Point A</span> and <span class="highlight-point">Point B</span>.</p>
-                    <p>One of these points is situated out in deep space (~15,000+ km away), while the other is right near the Earth's surface!</p>
+                    <p>Satellite 3 (PRN 08) adds a third sphere of radius <strong class="c-sat3" id="calc-step4-dist">... km</strong>.</p>
+                    <p>The 3rd sphere cuts through our circle at exactly <strong>TWO points</strong>: <span class="highlight-point">Point A</span> and <span class="highlight-point">Point B</span>.</p>
+                    <p>One point is on Earth, but the second point is ~20,000 km out in outer space! However, we still have one crucial problem: our watch clock is not an atomic clock.</p>
                     <div class="formula-box">
-                        $$\text{Circle} \cap \text{Sphere}_3 = \{ \text{Point}_A, \text{Point}_B \}$$
+                        $$\\text{Circle} \\cap \\text{Sphere}_3 = \\{ \\text{Point}_A \\text{ (Earth)}, \\text{Point}_B \\text{ (Space)} \\}$$
                     </div>
                 `
             },
             {
                 number: 5,
-                title: "Earth Filtering & Converting to Coordinates",
+                title: "Satellite 4: Clock Bias Correction & Final Coordinates",
                 badge: "Step 5 of 5",
-                subtitle: "Discard the space point and convert (X, Y, Z) to Latitude and Longitude",
+                subtitle: "The 4th satellite solves for 4 unknowns (X, Y, Z, and Clock Error)!",
                 description: `
-                    <p>Because the receiver is on Earth, the watch computer automatically checks the distance to Earth's center (<span class="code-pill">R_Earth \approx 6,371 km</span>). It discards the deep-space point and keeps the Earth solution!</p>
-                    <p>Finally, it converts the Cartesian coordinates <span class="code-pill">(X, Y, Z)</span> to Geographic Coordinates:</p>
+                    <p>Here is where the <strong>4th Satellite (PRN 15)</strong> solves the whole puzzle! We have 4 unknowns: 3 spatial coordinates (<span class="code-pill">X, Y, Z</span>) plus the receiver clock bias (<span class="code-pill">\\Delta t_{clock}</span>).</p>
+                    <p>The 4th sphere will ONLY intersect the Earth point if <span class="code-pill">\\Delta t_{clock}</span> is perfectly adjusted! By solving the system of 4 equations simultaneously:</p>
                     <div class="formula-box">
-                        $$\text{Latitude} = \arcsin\left(\frac{Z}{R}\right), \quad \text{Longitude} = \text{atan2}(Y, X)$$
+                        $$(X - X_i)^2 + (Y - Y_i)^2 + (Z - Z_i)^2 = \\Big(c \\cdot (\\Delta t_i - \\Delta t_{clock})\\Big)^2, \quad i \\in \\{1, 2, 3, 4\\}$$
                     </div>
+                    <p>The watch corrects its quartz clock to atomic synchronization, eliminates the outer space point, and converts Cartesian <span class="code-pill">(X, Y, Z)</span> to your exact whole-degree geographic coordinates:</p>
                     <div class="final-fix-card" id="calc-final-fix-box">
-                        Calculated Position: <strong id="calc-final-coords" class="glow-text">--° N, --° W</strong> (Exact Whole Degrees)
+                        Final Calculated Position: <strong id="calc-final-coords" class="glow-text">--° N, --° W</strong> &bull; Clock Sync: <strong style="color: #00d2ff;">0.00 ns Atomic Lock</strong>
                     </div>
                 `
             }
@@ -110,14 +112,10 @@ class GPSCalculator {
                         <p id="calc-step-sub" class="calc-subtitle">Subtitle</p>
                     </div>
 
-                    <div class="calc-main-content" id="calc-description">
-                        <!-- Dynamic explanation injected here -->
-                    </div>
+                    <div class="calc-main-content" id="calc-description"></div>
 
                     <!-- Live Numbers Comparison Table -->
-                    <div class="calc-live-data-table" id="calc-live-table">
-                        <!-- Injected live calculations -->
-                    </div>
+                    <div class="calc-live-data-table" id="calc-live-table"></div>
                 </div>
 
                 <!-- Playback controls -->
@@ -185,7 +183,7 @@ class GPSCalculator {
             } else {
                 this.stopAutoPlay();
             }
-        }, 4500);
+        }, 5000);
     }
 
     stopAutoPlay() {
@@ -205,21 +203,18 @@ class GPSCalculator {
         this.currentStep = Math.max(1, Math.min(this.totalSteps, step));
         const info = this.stepsInfo[this.currentStep - 1];
 
-        // Update tabs
         const tabs = this.container.querySelectorAll('.step-tab-btn');
         tabs.forEach(btn => {
             const btnStep = parseInt(btn.getAttribute('data-step'), 10);
             btn.classList.toggle('active', btnStep === this.currentStep);
         });
 
-        // Update text
         document.getElementById('calc-badge').textContent = info.badge;
         document.getElementById('calc-step-title').textContent = info.title;
         document.getElementById('calc-step-sub').textContent = info.subtitle;
         document.getElementById('calc-description').innerHTML = info.description;
         document.getElementById('calc-step-indicator').textContent = this.currentStep;
 
-        // Button disabled states
         document.getElementById('calc-btn-prev').disabled = (this.currentStep === 1);
         document.getElementById('calc-btn-next').disabled = (this.currentStep === this.totalSteps);
 
@@ -243,7 +238,6 @@ class GPSCalculator {
         const latStr = lat >= 0 ? `${lat}° N` : `${Math.abs(lat)}° S`;
         const lonStr = lon >= 0 ? `${lon}° E` : `${Math.abs(lon)}° W`;
 
-        // Update specific step inline placeholders
         const step2Dist = document.getElementById('calc-step2-dist');
         if (step2Dist && sats[0]) step2Dist.textContent = `${parseFloat(sats[0].distanceKm).toLocaleString()} km`;
 
@@ -256,7 +250,6 @@ class GPSCalculator {
         const finalCoords = document.getElementById('calc-final-coords');
         if (finalCoords) finalCoords.textContent = `${latStr}, ${lonStr}`;
 
-        // Live calculation data card below
         const liveTable = document.getElementById('calc-live-table');
         if (liveTable) {
             liveTable.innerHTML = `
@@ -265,7 +258,7 @@ class GPSCalculator {
                         <div class="math-card" style="border-left-color: ${s.color}">
                             <div class="math-card-title" style="color: ${s.color}">${s.name} (${s.prn})</div>
                             <div class="math-line"><span>Delay (\\Delta t):</span> <strong>${s.timeDeltaMs} ms</strong></div>
-                            <div class="math-line"><span>Speed (c):</span> <span>299,792 km/s</span></div>
+                            <div class="math-line"><span>Speed of Light (c):</span> <span>299,792 km/s</span></div>
                             <div class="math-line highlight-calc"><span>Radius (d_${idx+1}):</span> <strong>${parseFloat(s.distanceKm).toLocaleString()} km</strong></div>
                         </div>
                     `).join('')}

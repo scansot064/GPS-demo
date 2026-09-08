@@ -1,6 +1,6 @@
 /**
  * GPS Demonstration - Smartwatch Telemetry Display
- * Displays live simulated data received from 3 satellites
+ * Displays live simulated data received from 4 satellites
  */
 
 class SmartwatchDisplay {
@@ -24,7 +24,7 @@ class SmartwatchDisplay {
                             <div class="watch-time" id="watch-clock">12:00:00</div>
                             <div class="watch-status-badges">
                                 <span class="badge badge-gps" id="watch-gps-badge">
-                                    <span class="status-pulse"></span> GPS LOCK
+                                    <span class="status-pulse"></span> 4 SATS LOCKED
                                 </span>
                                 <span class="badge badge-battery">94% ⚡</span>
                             </div>
@@ -38,18 +38,30 @@ class SmartwatchDisplay {
                             </div>
                         </div>
 
-                        <!-- 3 Satellite Telemetry Cards -->
+                        <!-- Clock Bias & Fix Banner -->
+                        <div class="watch-clock-sync-banner" id="watch-clock-sync-banner">
+                            <div class="sync-item">
+                                <span class="sync-label">⏱️ Quartz Clock Bias (\\Delta t_{clock}):</span>
+                                <span class="sync-val mono-font" id="watch-clock-bias">+1.28 \\mu s \\rightarrow 0.00 ns (Synced!)</span>
+                            </div>
+                            <div class="sync-item">
+                                <span class="sync-label">🌐 Solution Type:</span>
+                                <span class="sync-val mono-font" style="color: #00ff88;">3D Fix + Time Sync (4 Sats)</span>
+                            </div>
+                        </div>
+
+                        <!-- 4 Satellite Telemetry Cards Grid -->
                         <div class="satellites-grid" id="watch-satellites-container">
                             <div class="sat-card empty-state">
-                                <p>Click <strong>"Acquire Satellites"</strong> or tap the 3D Globe to connect to the NAVSTAR constellation.</p>
+                                <p>Click <strong>"Acquire Satellites"</strong> or tap the 3D Globe to receive telemetry from all 4 satellites.</p>
                             </div>
                         </div>
 
                         <!-- Watch Footer Status -->
                         <div class="watch-footer">
                             <div class="watch-accuracy-info">
-                                <span>Constellation: <strong>GPS NAVSTAR</strong></span>
-                                <span>Status: <strong id="watch-lock-status" style="color: #00ff88;">3 Satellites Locked</strong></span>
+                                <span>Constellation: <strong>GPS NAVSTAR (Operational)</strong></span>
+                                <span>Status: <strong id="watch-lock-status" style="color: #00ff88;">4/4 Satellites Locked</strong></span>
                             </div>
                         </div>
                     </div>
@@ -86,12 +98,12 @@ class SmartwatchDisplay {
         if (gpsBadge) {
             gpsBadge.className = telemetry.satellitesAcquired ? 'badge badge-gps locked' : 'badge badge-gps searching';
             gpsBadge.innerHTML = telemetry.satellitesAcquired 
-                ? '<span class="status-pulse active"></span> 3 SATS LOCKED' 
+                ? '<span class="status-pulse active"></span> 4 SATS LOCKED' 
                 : '<span class="status-pulse searching"></span> SEARCHING...';
         }
 
         if (lockStatus) {
-            lockStatus.textContent = telemetry.satellitesAcquired ? '3/3 High GDOP Locked' : 'Searching for Signal...';
+            lockStatus.textContent = telemetry.satellitesAcquired ? '4/4 High GDOP Locked' : 'Searching for Signal...';
             lockStatus.style.color = telemetry.satellitesAcquired ? '#00ff88' : '#ffaa00';
         }
 
@@ -124,11 +136,11 @@ class SmartwatchDisplay {
                             <span class="t-val mono-font">X:${sat.ecef.x}, Y:${sat.ecef.y}, Z:${sat.ecef.z} km</span>
                         </div>
                         <div class="telemetry-row">
-                            <span class="t-label">⏱️ Broadcast Time ($t_{tx}$):</span>
+                            <span class="t-label">⏱️ Broadcast ($t_{tx}$):</span>
                             <span class="t-val mono-font">${sat.txTimeFormatted}</span>
                         </div>
                         <div class="telemetry-row">
-                            <span class="t-label">⌚ Arrival Time ($t_{rx}$):</span>
+                            <span class="t-label">⌚ Arrival ($t_{rx}$):</span>
                             <span class="t-val mono-font">${sat.rxTimeFormatted}</span>
                         </div>
                         <div class="telemetry-row highlight-row">
@@ -136,7 +148,7 @@ class SmartwatchDisplay {
                             <span class="t-val highlight-val mono-font">${sat.timeDeltaMs} ms</span>
                         </div>
                         <div class="telemetry-row calc-row">
-                            <span class="t-label">📏 Distance ($d = c \\times \\Delta t$):</span>
+                            <span class="t-label">📏 Pseudorange ($c \\times \\Delta t$):</span>
                             <span class="t-val distance-val mono-font">${parseFloat(sat.distanceKm).toLocaleString()} km</span>
                         </div>
                     </div>
