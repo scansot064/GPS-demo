@@ -54,6 +54,11 @@ class GPSInteractiveLab {
         const ecefX = Math.round(R * Math.cos(phi) * Math.cos(theta));
         const ecefY = Math.round(R * Math.cos(phi) * Math.sin(theta));
         const ecefZ = Math.round(R * Math.sin(phi));
+        const earthVectorLength = Math.sqrt(ecefX * ecefX + ecefY * ecefY + ecefZ * ecefZ) || R;
+        const deepSpaceRadius = R + 20000;
+        const deepSpaceX = Math.round((ecefX / earthVectorLength) * deepSpaceRadius);
+        const deepSpaceY = Math.round((ecefY / earthVectorLength) * deepSpaceRadius);
+        const deepSpaceZ = Math.round((ecefZ / earthVectorLength) * deepSpaceRadius);
 
         const latStr = coords.lat >= 0 ? `${coords.lat}° N` : `${Math.abs(coords.lat)}° S`;
         const lonStr = coords.lon >= 0 ? `${coords.lon}° E` : `${Math.abs(coords.lon)}° W`;
@@ -64,6 +69,7 @@ class GPSInteractiveLab {
             sat1, sat2, sat3, sat4,
             satellites,
             satSummary,
+            deepSpaceX, deepSpaceY, deepSpaceZ, deepSpaceRadius,
             lat: coords.lat, lon: coords.lon, latStr, lonStr
         };
     }
@@ -210,12 +216,15 @@ class GPSInteractiveLab {
                 id: 4,
                 badge: "Equation 4 of 5",
                 title: "4th Satellite Clock Bias Correction",
-                subtitle: "The 4th satellite is what removes the quartz clock error and picks the Earth solution instead of the space solution.",
-                hint: "Light speed (c) × (Measured Delay - Watch Clock Bias). This is solved for each satellite, but the 4th one fixes the receiver clock.",
+                subtitle: "The sphere intersections produce two mathematical candidates. The Earth-radius test keeps the ground fix and rejects the deep-space root.",
+                hint: "First correct the ranges with the clock bias, then compare both ± solutions with the Earth's radius.",
                 formulaTemplate: `
-                    <div class="lab-eq-line">
-                        <span class="eq-symbol">(X &minus; X<sub>i</sub>)<sup>2</sup> + (Y &minus; Y<sub>i</sub>)<sup>2</sup> + (Z &minus; Z<sub>i</sub>)<sup>2</sup></span>
-                        <span class="eq-operator">=</span>
+                    <div class="lab-stage4-equation">
+                        <div class="lab-stage4-left">
+                            <span class="eq-symbol">(X &minus; X<sub>i</sub>)<sup>2</sup> + (Y &minus; Y<sub>i</sub>)<sup>2</sup> + (Z &minus; Z<sub>i</sub>)<sup>2</sup></span>
+                            <span class="eq-operator">=</span>
+                        </div>
+                        <div class="lab-stage4-right">
                         <span class="eq-bracket">[</span>
                         <div class="drop-slot" data-slot="slot1" data-expected="c">
                             <span class="slot-placeholder">Drop: c</span>
@@ -231,6 +240,16 @@ class GPSInteractiveLab {
                         </div>
                         <span class="eq-paren">)</span>
                         <span class="eq-bracket">]</span><sup>2</sup>
+                        </div>
+                    </div>
+                    <div class="lab-root-equation">
+                        <span class="eq-symbol">(X, Y, Z)</span>
+                        <div class="lab-root-right">
+                            <span class="eq-operator">=</span>
+                            <span class="eq-symbol">solution<sub>center</sub></span>
+                            <span class="eq-operator">&plusmn;</span>
+                            <span class="eq-symbol">solution<sub>offset</sub></span>
+                        </div>
                     </div>
                 `,
                 getBlocks: (v) => [
@@ -252,8 +271,19 @@ class GPSInteractiveLab {
                         <div class="res-math-numbers" style="margin-top: 6px;">
                             <strong>Solved 3D Position:</strong> X = <span class="highlight-val">${v.ecefX} km</span>, Y = <span class="highlight-val">${v.ecefY} km</span>, Z = <span class="highlight-val">${v.ecefZ} km</span>
                         </div>
+                        <div class="candidate-solutions">
+                            <div class="candidate-title">The &plusmn; root gives two possible points</div>
+                            <div class="candidate-row candidate-earth">
+                                <span><strong>Candidate A &mdash; Earth surface</strong><br><span class="mono-font">(${v.ecefX}, ${v.ecefY}, ${v.ecefZ}) km</span></span>
+                                <span class="candidate-status">KEEP<br><small>radius &asymp; 6,371 km</small></span>
+                            </div>
+                            <div class="candidate-row candidate-space">
+                                <span><strong>Candidate B &mdash; deep space</strong><br><span class="mono-font">(${v.deepSpaceX}, ${v.deepSpaceY}, ${v.deepSpaceZ}) km</span></span>
+                                <span class="candidate-status">DISCARD<br><small>radius &asymp; ${v.deepSpaceRadius.toLocaleString()} km</small></span>
+                            </div>
+                        </div>
                         <p class="res-explanation">
-                            The 4th satellite synchronized your watch to atomic time (0.00 ns drift) and solved the full 4-equation system, leaving the Earth point and discarding the false space point.
+                            Solving the three-sphere geometry produces the two signs of a quadratic-style solution. The receiver compares each candidate with the known Earth radius: Candidate A lies on Earth, while Candidate B is about 20,000 km above the surface and is discarded. The 4th satellite also synchronizes the watch to atomic time (0.00 ns drift).
                         </p>
                     </div>
                 `
@@ -359,7 +389,7 @@ class GPSInteractiveLab {
                 <div class="lab-header">
                     <div class="lab-stage-steps">
                         ${this.stageDefinitions.map((s, idx) => `
-                            <div class="lab-step-indicator ${idx === this.currentStageIndex ? 'active' : ''} ${idx < this.currentStageIndex ? 'completed' : ''}">
+                            <div class="lab-step-indicator ${idx === this.currentStageIndex ? 'active' : ''} ${idx < this.currentStageIndex ? 'completed' : ''}" data-stage-index="${idx}" role="${idx < this.currentStageIndex ? 'button' : 'presentation'}" tabindex="${idx < this.currentStageIndex ? '0' : '-1'}">
                                 <span class="step-dot">${idx < this.currentStageIndex ? '✔' : idx + 1}</span>
                                 <span class="step-label">Stage ${idx + 1}</span>
                             </div>
@@ -417,9 +447,26 @@ class GPSInteractiveLab {
     }
 
     bindEvents() {
+        const stageIndicators = this.container.querySelectorAll('.lab-step-indicator.completed');
         const slots = this.container.querySelectorAll('.drop-slot');
         const solveBtn = document.getElementById('btn-solve-equation');
         const clearBtn = document.getElementById('btn-clear-slots');
+
+        stageIndicators.forEach(indicator => {
+            const openStage = () => {
+                this.currentStageIndex = Number(indicator.dataset.stageIndex);
+                this.selectedBlock = null;
+                this.render();
+            };
+
+            indicator.addEventListener('click', openStage);
+            indicator.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    openStage();
+                }
+            });
+        });
 
         const blocks = this.container.querySelectorAll('.movable-block');
         blocks.forEach(block => {

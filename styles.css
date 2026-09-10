@@ -505,11 +505,11 @@ body {
 .watch-screen {
     background: #040810;
     border-radius: 24px;
-    padding: 20px;
+    padding: 14px;
     border: 1px solid #192538;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 10px;
 }
 
 .watch-header {
@@ -636,9 +636,9 @@ body {
 }
 
 .satellites-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
 .sat-card {
@@ -646,7 +646,7 @@ body {
     border: 1px solid #162640;
     border-top: 4px solid var(--accent-cyan);
     border-radius: var(--radius-md);
-    padding: 14px;
+    padding: 8px 10px;
 }
 
 .sat-card.empty-state {
@@ -660,8 +660,9 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
-    padding-bottom: 8px;
+    gap: 8px;
+    margin-bottom: 6px;
+    padding-bottom: 5px;
     border-bottom: 1px solid #132238;
 }
 
@@ -669,7 +670,9 @@ body {
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 0.9rem;
+    min-width: 0;
+    font-size: 0.8rem;
+    white-space: nowrap;
 }
 
 .sat-dot {
@@ -687,8 +690,10 @@ body {
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 0.75rem;
+    flex-shrink: 0;
+    font-size: 0.68rem;
     color: var(--text-secondary);
+    white-space: nowrap;
 }
 
 .snr-bars {
@@ -717,8 +722,8 @@ body {
 .sat-telemetry-body {
     display: flex;
     flex-direction: column;
-    gap: 7px;
-    font-size: 0.8rem;
+    gap: 3px;
+    font-size: 0.68rem;
 }
 
 .telemetry-row {
@@ -726,16 +731,20 @@ body {
     justify-content: space-between;
     align-items: center;
     gap: 6px;
+    min-width: 0;
 }
 
 .t-label {
     color: var(--text-secondary);
-    font-size: 0.75rem;
+    font-size: 0.68rem;
+    white-space: nowrap;
 }
 
 .t-val {
     color: #e0e8f5;
     text-align: right;
+    min-width: 0;
+    white-space: nowrap;
 }
 
 .mono-font {
@@ -744,23 +753,12 @@ body {
 
 .highlight-row {
     background: rgba(0, 210, 255, 0.08);
-    padding: 3px 6px;
+    padding: 2px 6px;
     border-radius: 4px;
 }
 
 .highlight-val {
     color: var(--accent-cyan);
-    font-weight: 700;
-}
-
-.calc-row {
-    background: rgba(0, 255, 136, 0.08);
-    padding: 3px 6px;
-    border-radius: 4px;
-}
-
-.distance-val {
-    color: var(--accent-green);
     font-weight: 700;
 }
 
@@ -1174,6 +1172,73 @@ body {
     gap: 12px;
 }
 
+.lab-stage4-equation {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    justify-content: center;
+}
+
+.lab-stage4-left,
+.lab-stage4-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.lab-stage4-left {
+    min-width: 0;
+    justify-content: center;
+}
+
+.lab-stage4-left .eq-symbol {
+    white-space: nowrap;
+}
+
+.lab-stage4-right {
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 100%;
+}
+
+.lab-stage4-right .drop-slot {
+    min-width: 110px;
+}
+
+@media (max-width: 900px) {
+    .lab-stage4-right .drop-slot {
+        min-width: 88px;
+    }
+}
+
+.lab-root-equation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    margin-top: 12px;
+    padding-top: 0;
+}
+
+.lab-root-equation > .eq-symbol {
+    white-space: nowrap;
+}
+
+.lab-root-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-width: 0;
+    max-width: 100%;
+    flex-wrap: wrap;
+}
+
 .lab-eq-multi {
     display: flex;
     flex-direction: column;
@@ -1410,6 +1475,69 @@ body {
     margin-bottom: 10px;
 }
 
+.candidate-solutions {
+    margin: 16px 0;
+    padding: 12px;
+    background: rgba(5, 12, 24, 0.72);
+    border: 1px solid var(--border-bright);
+    border-radius: var(--radius-sm);
+}
+
+.candidate-title {
+    color: var(--text-primary);
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.candidate-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+}
+
+.candidate-earth {
+    background: rgba(0, 255, 136, 0.1);
+    border-left: 3px solid var(--accent-green);
+}
+
+.candidate-space {
+    background: rgba(255, 51, 102, 0.1);
+    border-left: 3px solid var(--accent-red);
+    margin-top: 6px;
+}
+
+.candidate-status {
+    min-width: 86px;
+    text-align: right;
+    font-weight: 700;
+}
+
+.candidate-earth .candidate-status {
+    color: var(--accent-green);
+}
+
+.lab-step-indicator.completed {
+    cursor: pointer;
+}
+
+.lab-step-indicator.completed:hover,
+.lab-step-indicator.completed:focus-visible {
+    color: #fff;
+}
+
+.candidate-space .candidate-status {
+    color: var(--accent-red);
+}
+
+.candidate-status small {
+    color: var(--text-secondary);
+    font-weight: 400;
+}
+
 .res-explanation {
     color: var(--text-secondary);
     font-size: 0.95rem;
@@ -1478,10 +1606,4 @@ body {
     border-radius: 6px;
     margin: 10px 0;
     color: #e2ecfc;
-}
-
-.math-breakdown-row {
-    border-top: 1px dashed rgba(255, 255, 255, 0.08);
-    padding-top: 4px;
-    margin-top: 2px;
 }
