@@ -62,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
             playPingSound();
             pingBtn.classList.add('active');
             pingBtn.innerHTML = '✔ Satellites Deployed & Beaming';
+            if (window.gpsI18n) window.gpsI18n.apply();
         });
     }
 
@@ -74,6 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
             opt.textContent = `${city.name} (${city.lat >= 0 ? city.lat + '°N' : Math.abs(city.lat) + '°S'}, ${city.lon >= 0 ? city.lon + '°E' : Math.abs(city.lon) + '°W'})`;
             presetSelect.appendChild(opt);
         });
+            if (window.gpsI18n) window.gpsI18n.apply();
 
         presetSelect.addEventListener('change', (e) => {
             if (!e.target.value) return;
@@ -84,6 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (pingBtn) {
                     pingBtn.classList.add('active');
                     pingBtn.innerHTML = '✔ Satellites Deployed & Beaming';
+                    if (window.gpsI18n) window.gpsI18n.apply();
                 }
             }
         });

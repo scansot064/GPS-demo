@@ -444,6 +444,7 @@ class GPSInteractiveLab {
         `;
 
         this.bindEvents();
+        if (window.gpsI18n) window.gpsI18n.apply();
     }
 
     bindEvents() {

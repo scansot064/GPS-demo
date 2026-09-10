@@ -153,6 +153,7 @@ class SmartwatchDisplay {
         });
 
         container.innerHTML = cardsHtml;
+        if (window.gpsI18n) window.gpsI18n.apply();
     }
 }
 
