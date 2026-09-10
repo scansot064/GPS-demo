@@ -247,5 +247,15 @@ window.GPS_LOCALES.en = {
     "Equation 2 Solved!": "Equation 2 Solved!",
     "Equation 3 Solved!": "Equation 3 Solved!",
     "Equation 4 Solved!": "Equation 4 Solved!",
-    "Equation 5 Solved!": "Equation 5 Solved!"
+    "Equation 5 Solved!": "Equation 5 Solved!",
+    "Three satellites, three equations, three unknown coordinates": "Three satellites, three equations, three unknown coordinates",
+    "Solve together for ": "Solve together for ",
+    "Because these are quadratic sphere equations, the system can produce two mathematical points.": "Because these are quadratic sphere equations, the system can produce two mathematical points.",
+    "3 equations": "3 equations", "± two candidates": "± two candidates",
+    "4th satellite selects and improves the fix": "4th satellite selects and improves the fix",
+    "Illustrative smartwatch processing time": "Illustrative smartwatch processing time",
+    "typical low-power GNSS/SOC clock": "typical low-power GNSS/SOC clock",
+    "four-satellite solve estimate": "four-satellite solve estimate",
+    "one position fix at this clock rate": "one position fix at this clock rate",
+    "That is roughly 1/400 of a second. A fitness watch can repeat this calculation once per second (or faster), saving each fix as a route point while leaving most processor time for the display, sensors, and battery-saving sleep.": "That is roughly 1/400 of a second. A fitness watch can repeat this calculation once per second (or faster), saving each fix as a route point while leaving most processor time for the display, sensors, and battery-saving sleep."
 };

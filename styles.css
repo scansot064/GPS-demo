@@ -1565,6 +1565,126 @@ body {
     font-size: 0.95rem;
 }
 
+.equation-system-visual,
+.soc-cycle-card {
+    margin: 16px 0;
+    padding: 14px;
+    background: rgba(5, 12, 24, 0.72);
+    border: 1px solid var(--border-bright);
+    border-radius: var(--radius-sm);
+}
+
+.equation-system-heading,
+.soc-cycle-title {
+    color: var(--text-primary);
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.equation-system-grid {
+    display: grid;
+    gap: 7px;
+    font-family: var(--font-mono);
+    color: #fff;
+    font-size: 0.88rem;
+}
+
+.equation-system-grid > div {
+    padding: 7px 9px;
+    border-left: 3px solid var(--accent-cyan);
+    background: rgba(0, 210, 255, 0.06);
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.equation-system-label {
+    display: inline-block;
+    width: 28px;
+    color: var(--accent-cyan);
+    font-weight: 700;
+}
+
+.equation-system-footer {
+    margin-top: 10px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.solution-path-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 14px 0;
+}
+
+.solution-path-step {
+    padding: 7px 10px;
+    border: 1px solid var(--border-bright);
+    border-radius: 999px;
+    color: var(--text-primary);
+    background: rgba(16, 29, 49, 0.75);
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.solution-path-highlight {
+    border-color: var(--accent-green);
+    color: var(--accent-green);
+}
+
+.solution-path-arrow {
+    color: var(--accent-cyan);
+    font-weight: 700;
+}
+
+.soc-cycle-card {
+    border-color: rgba(0, 255, 136, 0.35);
+    background: rgba(0, 255, 136, 0.06);
+}
+
+.soc-cycle-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.soc-cycle-grid > div {
+    padding: 10px;
+    border-radius: var(--radius-sm);
+    background: rgba(5, 12, 24, 0.72);
+    text-align: center;
+}
+
+.soc-cycle-grid strong,
+.soc-cycle-grid span {
+    display: block;
+}
+
+.soc-cycle-grid strong {
+    color: var(--accent-green);
+    font-size: 1.05rem;
+}
+
+.soc-cycle-grid span {
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    margin-top: 4px;
+}
+
+.soc-cycle-card p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+@media (max-width: 700px) {
+    .soc-cycle-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 .final-celebration {
     text-align: center;
     padding: 30px;

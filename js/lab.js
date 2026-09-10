@@ -206,6 +206,22 @@ class GPSInteractiveLab {
                         <div class="res-math-numbers" style="margin-top: 8px;">
                             <strong>Now add the other 3 satellites:</strong> S₂, S₃, and S₄ keep narrowing the possible position until the Earth point remains.
                         </div>
+                        <div class="equation-system-visual">
+                            <div class="equation-system-heading">Three satellites, three equations, three unknown coordinates</div>
+                            <div class="equation-system-grid">
+                                <div><span class="equation-system-label">S₁</span> (X − X₁)² + (Y − Y₁)² + (Z − Z₁)² = d₁²</div>
+                                <div><span class="equation-system-label">S₂</span> (X − X₂)² + (Y − Y₂)² + (Z − Z₂)² = d₂²</div>
+                                <div><span class="equation-system-label">S₃</span> (X − X₃)² + (Y − Y₃)² + (Z − Z₃)² = d₃²</div>
+                            </div>
+                            <div class="equation-system-footer">Solve together for <strong>X, Y, Z</strong>. Because these are quadratic sphere equations, the system can produce two mathematical points.</div>
+                        </div>
+                        <div class="solution-path-visual">
+                            <span class="solution-path-step">3 equations</span>
+                            <span class="solution-path-arrow">→</span>
+                            <span class="solution-path-step">± two candidates</span>
+                            <span class="solution-path-arrow">→</span>
+                            <span class="solution-path-step solution-path-highlight">4th satellite selects and improves the fix</span>
+                        </div>
                         <p class="res-explanation">
                             Sphere 1 is established! Every point on this 3D sphere is located at distance <strong>${v.distKm} km</strong> from Satellite 1, and the second, third, and fourth spheres do the same until one Earth point is left.
                         </p>
@@ -350,6 +366,15 @@ class GPSInteractiveLab {
                             <p class="res-explanation" style="font-size: 1.05rem; max-width: 680px; margin: 0 auto;">
                                 Congratulations! The 4 satellites agreed on one Earth point, corrected the quartz clock bias, and solved for the final whole-degree latitude and longitude.
                             </p>
+                            <div class="soc-cycle-card">
+                                <div class="soc-cycle-title">Illustrative smartwatch processing time</div>
+                                <div class="soc-cycle-grid">
+                                    <div><strong>100 MHz</strong><span>typical low-power GNSS/SOC clock</span></div>
+                                    <div><strong>~250,000 cycles</strong><span>four-satellite solve estimate</span></div>
+                                    <div><strong>~2.5 ms</strong><span>one position fix at this clock rate</span></div>
+                                </div>
+                                <p>That is roughly 1/400 of a second. A fitness watch can repeat this calculation once per second (or faster), saving each fix as a route point while leaving most processor time for the display, sensors, and battery-saving sleep.</p>
+                            </div>
                             <div style="margin-top: 20px;">
                                 <button class="btn btn-primary" id="btn-restart-lab">↺ Practice Again</button>
                             </div>
