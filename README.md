@@ -4,6 +4,15 @@ An interactive, browser-based demonstration designed for **secondary school phys
 
 Zero build steps, zero package installations—simply open `index.html` in any modern web browser!
 
+## 🌐 Localization
+
+All user-facing language data is kept outside the application logic in:
+
+- [`locales/en.js`](locales/en.js)
+- [`locales/es.js`](locales/es.js)
+
+The lightweight [`js/i18n.js`](js/i18n.js) runtime loads those browser-safe locale files, applies the selected language to static and dynamically generated content, and preserves the selected language in local storage. The two locale scripts are used instead of JSON so the demo continues to work when opened directly with `file://`, without requiring a local web server.
+
 ---
 
 ## 🌟 Key Sections
