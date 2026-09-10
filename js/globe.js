@@ -47,7 +47,10 @@ class GPSGlobe {
         const height = this.container.clientHeight || 500;
 
         this.camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-        this.camera.position.set(0, 8, 22);
+        // Keep the Earth centered in the viewer; vertical framing is handled
+        // by the scene rotation rather than an elevated camera position.
+        this.camera.position.set(0, 0, 22);
+        this.camera.lookAt(0, 0, 0);
 
         this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         this.renderer.setSize(width, height);
@@ -365,20 +368,6 @@ class GPSGlobe {
         this.visualGroup = new THREE.Group();
         this.scene.add(this.visualGroup);
 
-        this.rangeSpheres = [];
-        this.satellites.forEach(sat => {
-            const sphereGeo = new THREE.SphereGeometry(1, 32, 32);
-            const sphereMat = new THREE.MeshBasicMaterial({
-                color: sat.color,
-                wireframe: true,
-                transparent: true,
-                opacity: 0.0
-            });
-            const sphereMesh = new THREE.Mesh(sphereGeo, sphereMat);
-            this.visualGroup.add(sphereMesh);
-            this.rangeSpheres.push(sphereMesh);
-        });
-
         const circlePoints = [];
         for (let i = 0; i <= 64; i++) {
             const a = (i / 64) * Math.PI * 2;
@@ -437,14 +426,6 @@ class GPSGlobe {
     updateRangeSpheres() {
         const userWorldPos = new THREE.Vector3();
         this.userMarkerGroup.getWorldPosition(userWorldPos);
-
-        this.satelliteMeshes.forEach((satObj, index) => {
-            const satPos = satObj.worldPosition;
-            const dist = satPos.distanceTo(userWorldPos);
-            const sphere = this.rangeSpheres[index];
-            sphere.position.copy(satPos);
-            sphere.scale.set(dist, dist, dist);
-        });
 
         if (this.satelliteMeshes.length >= 2) {
             const p1 = this.satelliteMeshes[0].worldPosition;
@@ -584,20 +565,6 @@ class GPSGlobe {
 
     setCalculationStep(step) {
         this.activeStep = step;
-
-        this.rangeSpheres.forEach((sphere, i) => {
-            if (step === 2 && i === 0) {
-                sphere.material.opacity = 0.22;
-            } else if (step === 3 && (i === 0 || i === 1)) {
-                sphere.material.opacity = 0.18;
-            } else if (step === 4 && (i <= 2)) {
-                sphere.material.opacity = 0.14;
-            } else if (step === 5) {
-                sphere.material.opacity = 0.10;
-            } else {
-                sphere.material.opacity = 0.0;
-            }
-        });
 
         this.intersectionCircle.material.opacity = (step === 3 || step === 4) ? 0.8 : 0.0;
         // In step 4 both points are shown; in step 5 the false space point fades out as 4th sat confirms Earth point

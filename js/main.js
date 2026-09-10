@@ -31,6 +31,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize Interactive Lab (Section 5)
     const lab = new GPSInteractiveLab('interactive-lab-container');
 
+    // This callback is invoked synchronously while the globe initializes its
+    // default coordinates, so it must exist before GPSGlobe is constructed.
+    const updateSelectedDisplay = (coords) => {
+        const displayEl = document.getElementById('selected-location-badge');
+        if (displayEl) {
+            const latStr = coords.lat >= 0 ? `${coords.lat}° N` : `${Math.abs(coords.lat)}° S`;
+            const lonStr = coords.lon >= 0 ? `${coords.lon}° E` : `${Math.abs(coords.lon)}° W`;
+            displayEl.textContent = `${latStr}, ${lonStr}`;
+        }
+    };
+
     // Initialize 3D Globe
     const globe = new GPSGlobe('globe-canvas-container', {
         onLocationSelect: (telemetry) => {
@@ -77,16 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
-    // Hook up manual coordinate input buttons if present
-    const updateSelectedDisplay = (coords) => {
-        const displayEl = document.getElementById('selected-location-badge');
-        if (displayEl) {
-            const latStr = coords.lat >= 0 ? `${coords.lat}° N` : `${Math.abs(coords.lat)}° S`;
-            const lonStr = coords.lon >= 0 ? `${coords.lon}° E` : `${Math.abs(coords.lon)}° W`;
-            displayEl.textContent = `${latStr}, ${lonStr}`;
-        }
-    };
 
     // Synthesized Web Audio Sound Effect for radio satellite beep
     function playPingSound() {

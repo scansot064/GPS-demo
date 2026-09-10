@@ -16,7 +16,19 @@ class GPSInteractiveLab {
 
     getLiveValues() {
         const coords = (this.telemetry && this.telemetry.userCoords) ? this.telemetry.userCoords : { lat: 40, lon: -3 };
-        const sat1 = (this.telemetry && this.telemetry.satellites && this.telemetry.satellites[0]) ? this.telemetry.satellites[0] : null;
+        const satellites = (this.telemetry && this.telemetry.satellites && this.telemetry.satellites.length >= 4)
+            ? this.telemetry.satellites
+            : [
+                { name: 'NAVSTAR SVN 12', prn: 'PRN 12', ecef: { x: 14200, y: -8500, z: 21000 }, timeDeltaMs: '68.4230', distanceKm: '20515.00', rxTimeFormatted: '12:00:00.068423000', txTimeFormatted: '12:00:00.000000000' },
+                { name: 'NAVSTAR SVN 24', prn: 'PRN 24', ecef: { x: -18100, y: 9600, z: 17300 }, timeDeltaMs: '71.2240', distanceKm: '21363.00', rxTimeFormatted: '12:00:00.071224000', txTimeFormatted: '12:00:00.000000000' },
+                { name: 'NAVSTAR SVN 08', prn: 'PRN 08', ecef: { x: -9200, y: -20100, z: 15050 }, timeDeltaMs: '66.1100', distanceKm: '19835.00', rxTimeFormatted: '12:00:00.066110000', txTimeFormatted: '12:00:00.000000000' },
+                { name: 'NAVSTAR SVN 15', prn: 'PRN 15', ecef: { x: 19500, y: 4800, z: -18700 }, timeDeltaMs: '70.5800', distanceKm: '21168.00', rxTimeFormatted: '12:00:00.070580000', txTimeFormatted: '12:00:00.000000000' }
+            ];
+
+        const sat1 = satellites[0] || null;
+        const sat2 = satellites[1] || sat1;
+        const sat3 = satellites[2] || sat1;
+        const sat4 = satellites[3] || sat1;
 
         const delayMs = sat1 ? sat1.timeDeltaMs : "68.4230";
         const delaySec = (parseFloat(delayMs) / 1000).toFixed(5);
@@ -29,6 +41,12 @@ class GPSInteractiveLab {
         const x1 = sat1 ? sat1.ecef.x : 14200;
         const y1 = sat1 ? sat1.ecef.y : -8500;
         const z1 = sat1 ? sat1.ecef.z : 21000;
+
+        const satSummary = satellites.map((sat, index) => {
+            const d = parseFloat(sat.distanceKm || '0').toLocaleString();
+            const dt = sat.timeDeltaMs || '0';
+            return `S${index + 1}: ${dt} ms → ${d} km`;
+        }).join(' • ');
 
         const R = 6371;
         const phi = coords.lat * (Math.PI / 180);
@@ -43,6 +61,9 @@ class GPSInteractiveLab {
         return {
             rxTime, txTime, delayMs, delaySec, distKm, distNum,
             x1, y1, z1, ecefX, ecefY, ecefZ,
+            sat1, sat2, sat3, sat4,
+            satellites,
+            satSummary,
             lat: coords.lat, lon: coords.lon, latStr, lonStr
         };
     }
@@ -53,8 +74,8 @@ class GPSInteractiveLab {
                 id: 1,
                 badge: "Equation 1 of 5",
                 title: "Signal Travel Time (Time of Flight)",
-                subtitle: "Find how many milliseconds the radio wave traveled from Satellite 1 to your watch.",
-                hint: "Subtract the Broadcast Time from the Arrival Time.",
+                subtitle: "This same measurement is repeated for all 4 satellites in the GPS lock.",
+                hint: "Subtract the broadcast time from the arrival time for the satellite you are solving.",
                 formulaTemplate: `
                     <div class="lab-eq-line">
                         <span class="eq-symbol">&Delta;t<sub>1</sub></span>
@@ -82,8 +103,11 @@ class GPSInteractiveLab {
                         <div class="res-math-numbers">
                             <strong>Actual Math:</strong> ${v.rxTime} &minus; ${v.txTime} = <span class="highlight-val">${v.delaySec} s</span> (<span class="highlight-val">${v.delayMs} ms</span>)
                         </div>
+                        <div class="res-math-numbers" style="margin-top: 8px;">
+                            <strong>4-Satellite Lock:</strong> ${v.satSummary}
+                        </div>
                         <p class="res-explanation">
-                            By subtracting the two clock timestamps, the watch knows the radio wave took <strong>${v.delayMs} milliseconds</strong> to arrive from space!
+                            By subtracting the two clock timestamps, the watch knows the radio wave took <strong>${v.delayMs} milliseconds</strong> to travel from Satellite 1. The same calculation is repeated for Satellites 2, 3, and 4 to get the full 4-satellite fix.
                         </p>
                     </div>
                 `
@@ -92,8 +116,8 @@ class GPSInteractiveLab {
                 id: 2,
                 badge: "Equation 2 of 5",
                 title: "Calculating Distance (Pseudorange)",
-                subtitle: "Multiply the speed of light by the travel time to calculate distance.",
-                hint: "Distance = Speed of Light (c) × Travel Time (Δt₁).",
+                subtitle: "Each satellite gives its own pseudorange, and the receiver uses all 4 together to solve the fix.",
+                hint: "Distance = Speed of Light (c) × Travel Time (Δt₁). The same rule applies to S₂, S₃, and S₄.",
                 formulaTemplate: `
                     <div class="lab-eq-line">
                         <span class="eq-symbol">d<sub>1</sub></span>
@@ -121,8 +145,11 @@ class GPSInteractiveLab {
                         <div class="res-math-numbers">
                             <strong>Actual Math:</strong> 299,792.458 km/s &times; ${v.delaySec} s = <span class="highlight-val">${v.distKm} km</span>
                         </div>
+                        <div class="res-math-numbers" style="margin-top: 8px;">
+                            <strong>All 4 pseudoranges:</strong> ${v.satSummary}
+                        </div>
                         <p class="res-explanation">
-                            Radio waves travel at 299,792 km per second. Multiplying speed by time yields an exact distance of <strong>${v.distKm} km</strong> to Satellite 1!
+                            Radio waves travel at 299,792 km per second. Multiplying speed by time yields a pseudorange to Satellite 1, and the same process gives one pseudorange for each of the other three satellites as well.
                         </p>
                     </div>
                 `
@@ -131,8 +158,8 @@ class GPSInteractiveLab {
                 id: 3,
                 badge: "Equation 3 of 5",
                 title: "3D Sphere Equation (Satellite 1)",
-                subtitle: "Assemble the 3D sphere equation centered at Satellite 1 with radius d₁.",
-                hint: "Fill in the satellite 3D coordinates (X₁, Y₁, Z₁) and its radial distance d₁.",
+                subtitle: "Satellite 1 creates one sphere. Satellites 2, 3, and 4 shrink the possible location down to one Earth point.",
+                hint: "Fill in the satellite 3D coordinates (X₁, Y₁, Z₁) and its radial distance d₁; the same pattern repeats for the other 3 satellites.",
                 formulaTemplate: `
                     <div class="lab-eq-line">
                         <span class="eq-paren">(</span><span class="eq-symbol">X</span> <span class="eq-operator">&minus;</span>
@@ -170,8 +197,11 @@ class GPSInteractiveLab {
                         <div class="res-math-numbers">
                             <strong>Actual Math:</strong> (X &minus; ${v.x1})<sup>2</sup> + (Y &minus; ${v.y1})<sup>2</sup> + (Z &minus; ${v.z1})<sup>2</sup> = (${v.distKm} km)<sup>2</sup>
                         </div>
+                        <div class="res-math-numbers" style="margin-top: 8px;">
+                            <strong>Now add the other 3 satellites:</strong> S₂, S₃, and S₄ keep narrowing the possible position until the Earth point remains.
+                        </div>
                         <p class="res-explanation">
-                            Sphere 1 is established! Every point on this 3D sphere is located at distance <strong>${v.distKm} km</strong> from Satellite 1.
+                            Sphere 1 is established! Every point on this 3D sphere is located at distance <strong>${v.distKm} km</strong> from Satellite 1, and the second, third, and fourth spheres do the same until one Earth point is left.
                         </p>
                     </div>
                 `
@@ -180,8 +210,8 @@ class GPSInteractiveLab {
                 id: 4,
                 badge: "Equation 4 of 5",
                 title: "4th Satellite Clock Bias Correction",
-                subtitle: "Subtract the watch quartz clock error to lock into atomic time.",
-                hint: "Light speed (c) × (Measured Delay - Watch Clock Bias).",
+                subtitle: "The 4th satellite is what removes the quartz clock error and picks the Earth solution instead of the space solution.",
+                hint: "Light speed (c) × (Measured Delay - Watch Clock Bias). This is solved for each satellite, but the 4th one fixes the receiver clock.",
                 formulaTemplate: `
                     <div class="lab-eq-line">
                         <span class="eq-symbol">(X &minus; X<sub>i</sub>)<sup>2</sup> + (Y &minus; Y<sub>i</sub>)<sup>2</sup> + (Z &minus; Z<sub>i</sub>)<sup>2</sup></span>
@@ -216,11 +246,14 @@ class GPSInteractiveLab {
                         <div class="res-math-numbers">
                             <strong>Actual Math:</strong> (${v.delaySec} s &minus; 0.00000128 s) &times; 299,792.458 km/s = <span class="highlight-val">${v.distKm} km</span>
                         </div>
+                        <div class="res-math-numbers" style="margin-top: 8px;">
+                            <strong>All satellite distances:</strong> ${v.satSummary}
+                        </div>
                         <div class="res-math-numbers" style="margin-top: 6px;">
                             <strong>Solved 3D Position:</strong> X = <span class="highlight-val">${v.ecefX} km</span>, Y = <span class="highlight-val">${v.ecefY} km</span>, Z = <span class="highlight-val">${v.ecefZ} km</span>
                         </div>
                         <p class="res-explanation">
-                            The 4th satellite synchronized your watch to atomic time (0.00 ns drift) and solved the 4 equations for your exact 3D Cartesian coordinates in space!
+                            The 4th satellite synchronized your watch to atomic time (0.00 ns drift) and solved the full 4-equation system, leaving the Earth point and discarding the false space point.
                         </p>
                     </div>
                 `
@@ -229,7 +262,7 @@ class GPSInteractiveLab {
                 id: 5,
                 badge: "Equation 5 of 5",
                 title: "Converting to Latitude & Longitude",
-                subtitle: "Convert Cartesian (X, Y, Z) coordinates into the final whole-degree geographic coordinates!",
+                subtitle: "Once all 4 satellites agree on the same Earth point, convert the solved 3D position into geographic coordinates.",
                 hint: "Latitude uses Z divided by Earth radius (R_Earth); Longitude uses atan2 of Y and X.",
                 formulaTemplate: `
                     <div class="lab-eq-multi">
@@ -278,13 +311,14 @@ class GPSInteractiveLab {
                             <div class="res-math-numbers" style="margin: 14px 0; text-align: left; background: rgba(5, 12, 24, 0.85); padding: 14px; border-radius: 8px;">
                                 <div><strong>Latitude Arithmetic:</strong> arcsin( ${v.ecefZ} km / 6,371 km ) = arcsin(${sinRatio}) = <strong style="color:#00ff88;">${v.latStr}</strong></div>
                                 <div style="margin-top: 8px;"><strong>Longitude Arithmetic:</strong> atan2( ${v.ecefY} km , ${v.ecefX} km ) = <strong style="color:#00ff88;">${v.lonStr}</strong></div>
+                                <div style="margin-top: 8px;"><strong>4-satellite agreement:</strong> ${v.satSummary}</div>
                             </div>
 
                             <div class="res-title" style="color: #00ff88; font-size: 1.8rem; margin: 12px 0;">
                                 Final Coordinates: ${v.latStr}, ${v.lonStr}
                             </div>
                             <p class="res-explanation" style="font-size: 1.05rem; max-width: 680px; margin: 0 auto;">
-                                Congratulations! You computed the signal travel delay, multiplied by light speed, set up intersecting spheres, corrected clock drift, and solved for whole-degree coordinates!
+                                Congratulations! The 4 satellites agreed on one Earth point, corrected the quartz clock bias, and solved for the final whole-degree latitude and longitude.
                             </p>
                             <div style="margin-top: 20px;">
                                 <button class="btn btn-primary" id="btn-restart-lab">↺ Practice Again</button>
