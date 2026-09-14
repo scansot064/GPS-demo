@@ -94,6 +94,7 @@ class GPSCalculator {
         this.render();
         this.bindEvents();
         if (window.gpsI18n) window.gpsI18n.apply();
+        this.goToStep(this.currentStep);
     }
 
     render() {
